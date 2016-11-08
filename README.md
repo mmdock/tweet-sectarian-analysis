@@ -13,6 +13,8 @@ Mac:
 
 * [Install docker](https://docs.docker.com/engine/installation/)
 * [Install Tweepy](http://www.tweepy.org/): pip install Tweepy
+* [Install Textblob](https://textblob.readthedocs.io/en/dev/): pip install textblob
+* [Install Python Elasticsearch](https://elasticsearch-py.readthedocs.io/en/master/): pip install elesticsearch
 * [Pull Docker file from hub](https://hub.docker.com/r/nshou/elasticsearch-kibana/): docker pull nshou/elasticsearch-kibana
 * Start: docker run -d -p 9200:9200 -p 5601:5601 nshou/elasticsearch-kibana
 
