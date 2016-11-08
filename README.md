@@ -10,12 +10,10 @@ Twitter Data Mining project for CSCI 581 Fall 2016.
 
 ### How do I get set up? ###
 Mac:
+
 * [Install docker](https://docs.docker.com/engine/installation/)
-
 * Install: pip install Tweepy
-
 * Run: docker pull nshou/elasticsearch-kibana
-
 * Configuration
 * Dependencies
 * Database configuration
