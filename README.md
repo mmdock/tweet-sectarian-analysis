@@ -7,6 +7,7 @@ Twitter Data Mining project for CSCI 581 Fall 2016.
 * Online, real-time twitter analysis of sentiment with tweets related to sectarianism.
 * Version .001
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* Currently, creates a twitter stream listener (from tweepy), gets the info we want, adds it to elasticsearch.  In the future, can view data with Kibana in various ways based on the data pulled into elasticsearchDB.
 
 ### How do I get set up? ###
 Mac:
@@ -22,6 +23,8 @@ Elasticsearch now accessible via [localhost:9200](localhost:9200) and Kibana via
 
 [Getting started with Kibana](https://www.elastic.co/guide/en/kibana/current/introduction.html): https://www.elastic.co/guide/en/kibana/current/introduction.html
 
+[Getting started with Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
+https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html
 
 ### Some things to look out for: ###
 
