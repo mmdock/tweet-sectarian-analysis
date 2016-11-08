@@ -12,14 +12,11 @@ Twitter Data Mining project for CSCI 581 Fall 2016.
 Mac:
 
 * [Install docker](https://docs.docker.com/engine/installation/)
-* Install: pip install Tweepy
-* Run: docker pull nshou/elasticsearch-kibana
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+* [Install Tweepy](http://www.tweepy.org/): pip install Tweepy
+* [Pull Docker file from hub](https://hub.docker.com/r/nshou/elasticsearch-kibana/): docker pull nshou/elasticsearch-kibana
+* Start: docker run -d -p 9200:9200 -p 5601:5601 nshou/elasticsearch-kibana
 
+Elasticsearch now accessible via [localhost:9200](localhost:9200) and Kibana via [localhost:5601](localhost:5601)
 ### Contribution guidelines ###
 
 * Writing tests
