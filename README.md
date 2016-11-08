@@ -19,13 +19,17 @@ Mac:
 * Start: docker run -d -p 9200:9200 -p 5601:5601 nshou/elasticsearch-kibana
 
 Elasticsearch now accessible via [localhost:9200](localhost:9200) and Kibana via [localhost:5601](localhost:5601)
+
+[Getting started with Kibana](https://www.elastic.co/guide/en/kibana/current/introduction.html): https://www.elastic.co/guide/en/kibana/current/introduction.html
+
+
+### Some things to look out for: ###
+
+*If you are getting "401" errors, try resetting your system clock.  Twitter streams will return unauthorized if the time of your system is 
 ### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
+* Not yet written
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+* Morgan Dock
