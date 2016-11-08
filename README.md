@@ -1,16 +1,18 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Twitter Data Mining project for CSCI 581 Fall 2016.
 
 ### What is this repository for? ###
 
-* Quick summary
-* Version
+* Online, real-time twitter analysis of sentiment with tweets related to sectarianism.
+* Version .001
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###
-
-* Summary of set up
+Mac:
+* [Install docker](https://docs.docker.com/engine/installation/)
+* Install: pip install Tweepy
+* Run: docker pull nshou/elasticsearch-kibana
 * Configuration
 * Dependencies
 * Database configuration
