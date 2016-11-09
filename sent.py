@@ -19,13 +19,13 @@ class TweetStreamListener(StreamListener):
 
         # decode json
         dict_data = json.loads(data)
-
         # pass tweet into TextBlob
         if "text" not in dict_data:
             return
-        
+        if not dict_data.get("place"):
+            return
         tweet = TextBlob(dict_data["text"])
-
+        print(json.dumps(dict_data, indent=4, sort_keys=True))
         # determine if sentiment is positive, negative, or neutral
         if tweet.sentiment.polarity < 0:
             sentiment = "negative"
@@ -47,7 +47,8 @@ class TweetStreamListener(StreamListener):
                        "polarity": tweet.sentiment.polarity,
                        "subjectivity": tweet.sentiment.subjectivity,
                        "sentiment": sentiment,
-                       "timestamp": dict_data["timestamp_ms"]}
+                       "timestamp": dict_data["timestamp_ms"],
+                       "place": dict_data["place"]["full_name"]}
                  )
         return True
 
