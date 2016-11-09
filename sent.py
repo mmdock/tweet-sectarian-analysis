@@ -21,6 +21,9 @@ class TweetStreamListener(StreamListener):
         dict_data = json.loads(data)
 
         # pass tweet into TextBlob
+        if "text" not in dict_data:
+            return
+        
         tweet = TextBlob(dict_data["text"])
 
         # determine if sentiment is positive, negative, or neutral
@@ -35,7 +38,7 @@ class TweetStreamListener(StreamListener):
         print (str(tweet.sentiment.polarity) + " " + sentiment)
 
         # add text and sentiment info to elasticsearch
-        es.index(index="location",
+        es.index(index="sentiment",
                  doc_type="test-type",
                  body={"author": dict_data["user"]["screen_name"],
                        "date": dict_data["created_at"],
@@ -43,7 +46,9 @@ class TweetStreamListener(StreamListener):
                        "message": dict_data["text"],
                        "polarity": tweet.sentiment.polarity,
                        "subjectivity": tweet.sentiment.subjectivity,
-                       "sentiment": sentiment})
+                       "sentiment": sentiment,
+                       "timestamp": dict_data["timestamp_ms"]}
+                 )
         return True
 
     # on failure
