@@ -21,6 +21,8 @@ Mac:
 
 Elasticsearch now accessible via [localhost:9200](localhost:9200) and Kibana via [localhost:5601](localhost:5601)
 
+When browsing to kibana, uncheck the selected box, and put the index as sentiment*
+
 [Getting started with Kibana](https://www.elastic.co/guide/en/kibana/current/introduction.html): https://www.elastic.co/guide/en/kibana/current/introduction.html
 
 [Getting started with Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
