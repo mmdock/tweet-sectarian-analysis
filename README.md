@@ -28,6 +28,12 @@ When browsing to kibana, uncheck the selected box, and put the index as sentimen
 [Getting started with Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
 https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html
 
+A useful command:
+
+    curl -XDELETE 'localhost:9200/sentiment'
+
+Deletes the index sentiment and all its tweets.  Do this if you are updating what sent.py stores in ElasticSearch.
+
 ### Some things to look out for: ###
 
 *If you are getting "401" errors, try resetting your system clock.  Twitter streams will return unauthorized if the time of your system is 
