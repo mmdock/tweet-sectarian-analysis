@@ -27,7 +27,7 @@ class TweetStreamListener(StreamListener):
         while (time.time() - self.time) < self.limit:
             try:
                 dict_data = json.loads(data)
-                self.tweet_data.append(dict_data["text"])
+                self.tweet_data.append("\"" + dict_data["text"] + "\",")
                 return True
             except BaseException:
                 print ('failed ondata,', str(e))
