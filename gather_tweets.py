@@ -25,12 +25,15 @@ class TweetStreamListener(StreamListener):
 
         try:
             dict_data = json.loads(data)
+            if not dict_data.get("place"):
+                return
             if 'https://t.co' not in dict_data['text']:
-                saveFile = io.open('raw_tweets.txt', 'a', encoding='utf-8')
-                saveFile.write(dict_data["text"].replace('\n', ' '))
-                saveFile.write('\n')
-                saveFile.close()
-                self.tweet_count += 1
+                if dict_data["place"]["country_code"] == "US":
+                    saveFile = io.open('raw_tweets.txt', 'a', encoding='utf-8')
+                    saveFile.write(dict_data["text"].replace('\n', ' '))
+                    saveFile.write('\n')
+                    saveFile.close()
+                    self.tweet_count += 1
         except BaseException:
             print('failed ondata,', str(e))
             time.sleep(5)
