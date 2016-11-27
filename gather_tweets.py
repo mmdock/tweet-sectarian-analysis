@@ -19,15 +19,13 @@ class TweetStreamListener(StreamListener):
         self.time = start_time
         self.limit = tweet_limit
         self.tweet_count = 0
-        self.ignored_tags = open('ignored_tags.txt').read().splitlines()
 
     # on success
     def on_data(self, data):
 
         try:
             dict_data = json.loads(data)
-            if all(word not in dict_data['text']
-                   for word in self.ignored_tags):
+            if 'https://t.co' not in dict_data['text']:
                 saveFile = io.open('raw_tweets.txt', 'a', encoding='utf-8')
                 saveFile.write(dict_data["text"].replace('\n', ' '))
                 saveFile.write('\n')
@@ -57,7 +55,7 @@ if __name__ == '__main__':
     auth.set_access_token(access_token, access_token_secret)
 
     # Keywords for tracking:
-    keywords = [line.strip() for line in open('badwords.txt')]
+    keywords = [line.strip() for line in open('keywords.txt')]
     # create instance of the tweepy stream
     start_time = time.time()
     stream = Stream(auth, listener)
