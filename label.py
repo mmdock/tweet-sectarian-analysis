@@ -14,7 +14,7 @@ def label(tweets):
     except ValueError:
         print("Sorry, I didn't understand that.")
     if  (group == "1"):
-        lab(0,5,content)
+        lab(0,499,content)
     elif(group == "2"):
         lab(500,1000,content)
     elif(group == "3"):
@@ -23,11 +23,11 @@ def label(tweets):
         print("Invalid Entry")
 
 def lab(start, stop,content):
-    ratings = []
-    texts = []
-    types = []
     rated = 0
     for x in range(start, stop):
+        ratings = []
+        texts = []
+        types = []
         print("You Have Rated... " + str(rated) + "\n")
         if(rated == 251):
             break
