@@ -65,7 +65,7 @@ class TweetStreamListener(StreamListener):
         m = Markers()
         print(json.dumps(dict_data["place"], indent=4, sort_keys=True))
         if(dict_data["place"]["country_code"] == "US"):
-            m.val.append({'icon': icons[0], 'lat': dict_data["place"]["bounding_box"]["coordinates"][0][0][0], 'lng': dict_data["place"]["bounding_box"]["coordinates"][0][0][1], 'infobox': dict_data["text"]})
+            m.val.append({'icon': icons[0], 'lng': dict_data["place"]["bounding_box"]["coordinates"][0][0][0], 'lat': dict_data["place"]["bounding_box"]["coordinates"][0][0][1], 'infobox': dict_data["text"]})
         print(m.val)
         return True
 
