@@ -64,7 +64,8 @@ class TweetStreamListener(StreamListener):
             return
         m = Markers()
         print(json.dumps(dict_data["place"], indent=4, sort_keys=True))
-        m.val.append({'icon': icons[0], 'lat': dict_data["place"]["bounding_box"]["coordinates"][0][0][0], 'lng': dict_data["place"]["bounding_box"]["coordinates"][0][0][1], 'infobox': dict_data["text"]})
+        if(dict_data["place"]["country_code"] == "US"):
+            m.val.append({'icon': icons[0], 'lng': dict_data["place"]["bounding_box"]["coordinates"][0][0][0], 'lat': dict_data["place"]["bounding_box"]["coordinates"][0][0][1], 'infobox': dict_data["text"]})
         print(m.val)
         return True
 
@@ -93,5 +94,5 @@ if __name__ == '__main__':
 
     # search twitter for "congress" keyword
     threading.Thread(target=begin_stream).start()
-    app.run(debug=True, use_reloader=True)
+    app.run(debug=True, use_reloader=True, host= '0.0.0.0')
 
