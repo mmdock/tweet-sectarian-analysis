@@ -14,7 +14,7 @@ def label(tweets):
     except ValueError:
         print("Sorry, I didn't understand that.")
     if  (group == "1"):
-        lab(0,499,content)
+        lab(0,5,content)
     elif(group == "2"):
         lab(500,1000,content)
     elif(group == "3"):
@@ -28,12 +28,13 @@ def lab(start, stop,content):
     types = []
     rated = 0
     for x in range(start, stop):
+        print("You Have Rated... " + str(rated) + "\n")
         if(rated == 251):
             break
-        print(content[x])
+        print(content[x] + "\n")
         while True:
             try:
-                type = str(input("Select Type: 4=sexual orientation, 3=racial, 2=gender, 1=religion, 0=skip "))
+                type = str(input("Select Type: 7=Other 6=Political, 5= Disability, 4=sexual orientation, 3=racial, 2=gender, 1=religion, 0=skip "))
                 #skip
                 if(type == "0"):
                     break
