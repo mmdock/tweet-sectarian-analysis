@@ -26,14 +26,15 @@ class TweetStreamListener(StreamListener):
         saveFile = io.open('raw_tweets.json', 'a', encoding='utf-8')
         while (time.time() - self.time) < self.limit:
             try:
-                self.tweet_data.append(data)
+                dict_data = json.loads(data)
+                self.tweet_data.append(dict_data["text"])
                 return True
             except BaseException:
                 print ('failed ondata,', str(e))
                 time.sleep(5)
                 pass
  
-        saveFile = io.open('raw_tweets.json', 'w', encoding='utf-8')
+        saveFile = io.open('raw_tweets.csv', 'w', encoding='utf-8')
         saveFile.write(u'[\n')
         saveFile.write(','.join(self.tweet_data))
         saveFile.write(u'\n]')
