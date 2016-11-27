@@ -1,4 +1,4 @@
-##Labler, reads in a csv of tweet texts displays so that we can manully label text.
+##Labler, reads in a csv of tweets. text displays so that we can manully label text.
 ##Outputs labled tweets to a csv that we can combine later and feed to a model.
 
 ##DCS
