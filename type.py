@@ -2,7 +2,7 @@
 ##Input a single tweet (as given from streaming API or otherwise)
 ##Returns True/False if the given tweet is racist.
 
-##Basically preporcesses a tweet and then checks the string against a set of known racist tweets.
+##Basically preprocesses a tweet and then checks the string against a set of known racist tweets.
 ##DCS
 
 import re
