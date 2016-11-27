@@ -14,7 +14,7 @@ def label(tweets):
     except ValueError:
         print("Sorry, I didn't understand that.")
     if  (group == "1"):
-        lab(0,499,content)
+        lab(0,5,content)
     elif(group == "2"):
         lab(500,1000,content)
     elif(group == "3"):
@@ -48,20 +48,20 @@ def lab(start, stop,content):
                 ratings.append('5')
                 types.append(type)
                 rated +=1
-                break
             #Anti racist remark
             elif(rating == "1"):
                 texts.append(content[x])
                 ratings.append('1')
                 types.append(type)
                 rated +=1
-                break
             else:
                 print("Invalid Entry")
                 print(content[x])
                 continue
-    d = {'text': texts, 'sentiment': ratings, 'types':types}
-    df = pd.DataFrame(data=d)
-    df.to_csv('ratingout.csv')
+            d = {'text': texts, 'sentiment': ratings, 'types':types}
+            df = pd.DataFrame(data=d)
+            with open('ratingout.csv', 'a') as f:
+                df.to_csv(f, header=False)
+            break
 
 label("raw_tweets.txt")
