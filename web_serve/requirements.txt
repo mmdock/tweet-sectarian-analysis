@@ -1,0 +1,4 @@
+flask
+flask-googlemaps
+jinja2
+tweepy
