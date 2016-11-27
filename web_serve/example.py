@@ -11,7 +11,7 @@ app.config['GOOGLEMAPS_KEY'] = "AIzaSyAZzeHhs-8JZ7i18MjFuM35dJHq70n3Hx4"
 GoogleMaps(app, key="AIzaSyAZzeHhs-8JZ7i18MjFuM35dJHq70n3Hx4")
 
 
-@app.route("/")
+@app.route("/smallmaps")
 def mapview():
     mymap = Map(
         identifier="view-side",  # for DOM element
@@ -59,6 +59,12 @@ def mapview():
                     "<img src='//placehold.it/50'>"
                     "<br>Images allowed!"
                 )
+            },
+                        {
+                'icon': icons.dots.blue,
+                'lat': 37.4450,
+                'lng': -122.1400,
+                'infobox': "Hello I am <b style='color:blue;'>BLUE</b>!"
             }
         ]
     )
@@ -322,7 +328,7 @@ def mapview():
     )
 
 
-@app.route('/fullmap')
+@app.route('/')
 def fullmap():
     fullmap = Map(
         identifier="fullmap",
@@ -338,6 +344,12 @@ def fullmap():
         lat=37.4419,
         lng=-122.1419,
         markers=[
+            {
+                'icon': '//maps.google.com/mapfiles/ms/icons/green-dot.png',
+                'lat': 37.4419,
+                'lng': -122.2419,
+                'infobox': "Hello I am <b style='color:green;'>GREEN</b>!"
+            },
             {
                 'icon': '//maps.google.com/mapfiles/ms/icons/green-dot.png',
                 'lat': 37.4419,
