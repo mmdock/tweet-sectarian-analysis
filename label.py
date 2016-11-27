@@ -17,10 +17,11 @@ def label(tweets):
             except ValueError:
                 print("Sorry, I didn't understand that.")
                 continue
-
+            #Pro Racist Remarks
             if  (rating == "5"):
                 ratings.append('5')
                 break
+            #Anti racist remark
             elif(rating == "1"):
                 ratings.append('1')
                 break
