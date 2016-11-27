@@ -14,7 +14,7 @@ def label(tweets):
     except ValueError:
         print("Sorry, I didn't understand that.")
     if  (group == "1"):
-        lab(0,5,content)
+        lab(0,499,content)
     elif(group == "2"):
         lab(500,1000,content)
     elif(group == "3"):
