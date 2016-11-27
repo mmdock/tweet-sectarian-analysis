@@ -23,11 +23,11 @@ def label(tweets):
         print("Invalid Entry")
 
 def lab(start, stop,content):
-    ratings = []
-    texts = []
-    types = []
     rated = 0
     for x in range(start, stop):
+        ratings = []
+        texts = []
+        types = []
         print("You Have Rated... " + str(rated) + "\n")
         if(rated == 251):
             break
@@ -48,20 +48,20 @@ def lab(start, stop,content):
                 ratings.append('5')
                 types.append(type)
                 rated +=1
-                break
             #Anti racist remark
             elif(rating == "1"):
                 texts.append(content[x])
                 ratings.append('1')
                 types.append(type)
                 rated +=1
-                break
             else:
                 print("Invalid Entry")
                 print(content[x])
                 continue
-    d = {'text': texts, 'sentiment': ratings, 'types':types}
-    df = pd.DataFrame(data=d)
-    df.to_csv('ratingout.csv')
+            d = {'text': texts, 'sentiment': ratings, 'types':types}
+            df = pd.DataFrame(data=d)
+            with open('ratingout.csv', 'a') as f:
+                df.to_csv(f, header=False)
+            break
 
 label("raw_tweets.txt")
