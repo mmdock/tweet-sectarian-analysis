@@ -12,7 +12,7 @@ import threading
 import json
 
 ## Creating Flask app.  Setting Template location
-app = Flask(__name__, template_folder="web_serve/mytemplate")
+app = Flask(__name__, template_folder="templates")
 app.config['GOOGLEMAPS_KEY'] = google_token_key
 GoogleMaps(app, key=google_token_key)
 
