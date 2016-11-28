@@ -62,6 +62,7 @@ def statistics(k):
     df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text","sentiment", "category"])
     labels = []
     values = []
+    
     ## City
     labs = list(df.city.unique())
     vals = []
@@ -69,7 +70,8 @@ def statistics(k):
         vals.append((df[df.city == label]).shape[0])
     zipped = list(zip(labs,vals))
     sort = sorted(zipped, key=lambda x: x[1])
-    sort = sort[-k:]
+    if k < len(labs):
+        sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
 ##    values.append(vals)
@@ -82,7 +84,8 @@ def statistics(k):
         vals.append((df[df.author == label]).shape[0])
     zipped = list(zip(labs,vals))
     sort = sorted(zipped, key=lambda x: x[1])
-    sort = sort[-k:]
+    if k < len(labs):
+        sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
     
@@ -94,9 +97,11 @@ def statistics(k):
         vals.append((df[df.state == label]).shape[0])
     zipped = list(zip(labs,vals))
     sort = sorted(zipped, key=lambda x: x[1])
-    sort = sort[-k:]
+    if k < len(labs):
+        sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
+    
     ## City avg
     labs = list(df.city.unique())
     vals = []
@@ -104,29 +109,34 @@ def statistics(k):
         vals.append((df[df.city == label]).sentiment.mean())
     zipped = list(zip(labs,vals))
     sort = sorted(zipped, key=lambda x: x[1])
-    sort = sort[-k:]
+    if k < len(labs):
+        sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
-
-    ##States avg
+##
+##    ##States avg
     labs = list(df.state.unique())
     vals = []
     for label in labs:
         vals.append((df[df.state == label]).sentiment.mean())
     zipped = list(zip(labs,vals))
     sort = sorted(zipped, key=lambda x: x[1])
-    sort = sort[-k:]
+    print(sort)
+    if k < len(labs):
+        sort = sort[-k:]
+    print(sort)
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
-
-    ## Author avg
+##
+##    ## Author avg
     labs = list(df.author.unique())
     vals = []
     for label in labs:
         vals.append((df[df.author == label]).sentiment.mean())
     zipped = list(zip(labs,vals))
     sort = sorted(zipped, key=lambda x: x[1])
-    sort = sort[-k:]
+    if k < len(labs):
+        sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
     return render_template('statistics.html', values=values, labels=labels)
@@ -144,7 +154,8 @@ def city_statistics(city, k):
         vals.append((df[df.author == label])[df.sentiment == 5].shape[0])
     zipped = list(zip(labs,vals))
     sort = sorted(zipped, key=lambda x: x[1])
-    sort = sort[-k:]
+    if k < len(labs):
+        sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
 
@@ -152,16 +163,17 @@ def city_statistics(city, k):
     labs = list(df[df.city == city].author.unique())
     vals = []
     for label in labs:
-        vals.append((df[df.author == label])[df.sentiment == 5].shape[0])
+        vals.append((df[df.author == label])[df.sentiment == 1].shape[0])
     zipped = list(zip(labs,vals))
     sort = sorted(zipped, key=lambda x: x[1])
-    sort = sort[-k:]
+    if k < len(labs):
+        sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
 
     return render_template('city_statistics.html', values=values, labels=labels)
 
-@app.route("/state_statistics/<city>/<k>")
+@app.route("/state_statistics/<state>/<k>")
 def state_statistics(state, k):
     k = int(k)
     df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text", "sentiment", "category"])
@@ -174,18 +186,20 @@ def state_statistics(state, k):
         vals.append((df[df.author == label])[df.sentiment == 5].shape[0])
     zipped = list(zip(labs,vals))
     sort = sorted(zipped, key=lambda x: x[1])
-    sort = sort[-k:]
+    if k < len(labs):
+        sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
 
     ## K Most positive people in City
-    labs = list(df[df.city == city].author.unique())
+    labs = list(df[df.state == state].author.unique())
     vals = []
     for label in labs:
-        vals.append((df[df.author == label])[df.sentiment == 5].shape[0])
+        vals.append((df[df.author == label])[df.sentiment == 1].shape[0])
     zipped = list(zip(labs,vals))
     sort = sorted(zipped, key=lambda x: x[1])
-    sort = sort[-k:]
+    if k < len(labs):
+        sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
 
@@ -207,10 +221,7 @@ class TweetStreamListener(StreamListener):
         print(json.dumps(dict_data, indent=4, sort_keys=True))
         m = Markers()
 
-        if not dict_data["user"]["location"]:
-            c1 = dict_data["place"]["full_name"]
-            c1 = c1.strip().split(", ")
-        elif not dict_data["place"]["full_name"]:
+        if dict_data["place"]["full_name"]:
             c1 = dict_data["place"]["full_name"]
             c1 = c1.strip().split(", ")
         else:
