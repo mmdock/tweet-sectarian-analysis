@@ -14,8 +14,10 @@ app = Flask(__name__, template_folder="web_serve/mytemplate")
 app.config['GOOGLEMAPS_KEY'] = google_token_key
 GoogleMaps(app, key=google_token_key)
 
-icons = ['//maps.google.com/mapfiles/ms/icons/blue-dot.png', '//maps.google.com/mapfiles/ms/icons/green-dot.png', icons.dots.yellow, icons.dots.red]
+def my_max(li):
+    return max(li)
 
+icons = ['//maps.google.com/mapfiles/ms/icons/blue-dot.png', '//maps.google.com/mapfiles/ms/icons/green-dot.png', icons.dots.yellow, icons.dots.red]
 class Markers(object):
     class __Markers:
         def __init__(self):
@@ -56,9 +58,55 @@ def fullmap():
 @app.route("/statistics")
 def statistics():
     df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text"])
-    df.describe()
-    labels = list(df.city.unique())
-    values = list(df.groupby("city").city.nunique())
+    labels = []
+    values = []
+    ## City
+    labs = list(df.city.unique())
+    vals = []
+    for label in labs:
+        vals.append((df[df.city == label]).shape[0])
+    values.append(vals)
+    labels.append(labs)
+    
+    ## Author
+    labs = list(df.author.unique())
+    vals = []
+    for label in labs:
+        vals.append((df[df.author == label]).shape[0])
+    values.append(vals)
+    labels.append(labs)
+
+    ##States
+    labs = list(df.state.unique())
+    vals = []
+    for label in labs:
+        vals.append((df[df.state == label]).shape[0])
+    values.append(vals)
+    labels.append(labs)
+    
+##    ## City avg
+##    labs = list(df.city.unique())
+##    vals = []
+##    for label in labs:
+##        vals.append((df[df.city == label]).mean())
+##    values.append(vals)
+##    labels.append(labs)
+##    
+##    ##States avg
+##    labs = list(df.state.unique())
+##    vals = []
+##    for label in labs:
+##        vals.append((df[df.state == label]).mean())
+##    values.append(vals)
+##    labels.append(labs)
+##
+##    ## Author avg
+##    labs = list(df.author.unique())
+##    vals = []
+##    for label in labs:
+##        vals.append((df[df.author == label]).mean())
+##    values.append(vals)
+##    labels.append(labs)
     return render_template('index.html', values=values, labels=labels)
 
 class TweetStreamListener(StreamListener):
@@ -125,6 +173,6 @@ if __name__ == '__main__':
 
 
     # search twitter for "congress" keyword
-    threading.Thread(target=begin_stream).start()
+  #  threading.Thread(target=begin_stream).start()
     app.run(debug=True, use_reloader=True, host= '0.0.0.0')
 
