@@ -1,22 +1,27 @@
-import json
-import pandas as pd
 from tweepy.streaming import StreamListener
-from tweepy import OAuthHandler
-from tweepy import Stream
 from flask import Flask, render_template
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map, icons
-import threading
-from config import *
-import os.path as path
 from train.train import KNNClassifier
+from tweepy import OAuthHandler
+from tweepy import Stream
+import os.path as path
+from config import *
+import pandas as pd
+import threading
+import json
 
+## Creating Flask app.  Setting Template location
 app = Flask(__name__, template_folder="web_serve/mytemplate")
 app.config['GOOGLEMAPS_KEY'] = google_token_key
 GoogleMaps(app, key=google_token_key)
 
+##Possible Marker Colors
 icons = [icons.dots.brown, icons.dots.green, icons.dots.yellow, icons.dots.red, icons.dots.orange, icons.dots.blue, icons.dots.black]
+
+
 class Markers(object):
+    '''Marker Class:  A Singleton list of Markers for the map'''
     class __Markers:
         def __init__(self):
             self.val = [None]
@@ -32,8 +37,10 @@ class Markers(object):
     def __setattr__(self, name):
         return setattr(self.instance, name)
 
+
 @app.route("/")
 def fullmap():
+    '''Full Map Flask Route function.  Loads Markers'''
     m = Markers()
     fullmap = Map(
         identifier="fullmap",
@@ -55,13 +62,15 @@ def fullmap():
 
 @app.route("/statistics/<k>")
 def statistics(k):
+    '''Basic Statics Information Function.'''
+    
     k = int(k)
     df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text","sentiment", "category"])
     df = df.drop_duplicates()
     labels = []
     values = []
     
-    ## City
+    ## City Count - Top k
     labs = list(df.city.unique())
     vals = []
     for label in labs:
@@ -72,10 +81,9 @@ def statistics(k):
         sort = sort[-k:]
     values.append([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA")) ])
     labels.append([x for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
-##    values.append(vals)
-##    labels.append(labs)
 
-    ## Author
+
+    ## Author Count - Top k
     labs = list(df.author.unique())
     vals = []
     for label in labs:
@@ -88,7 +96,7 @@ def statistics(k):
     labels.append([x for x,y in sort])
     
 
-    ##States
+    ## States Count - Top k
     labs = list(df.state.unique())
     vals = []
     for label in labs:
@@ -100,7 +108,7 @@ def statistics(k):
     values.append([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
     labels.append([x for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
     
-    ## City avg
+    ## City avg - Top k
     labs = list(df.city.unique())
     vals = []
     for label in labs:
@@ -111,8 +119,8 @@ def statistics(k):
         sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
-##
-##    ##States avg
+
+    ## States avg - Top k
     labs = list(df.state.unique())
     vals = []
     for label in labs:
@@ -125,8 +133,8 @@ def statistics(k):
     print(sort)
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
-##
-##    ## Author avg
+
+    ## Author avg - Top k
     labs = list(df.author.unique())
     vals = []
     for label in labs:
@@ -141,11 +149,14 @@ def statistics(k):
 
 @app.route("/city_statistics/<city>/<k>")
 def city_statistics(city, k):
+    '''Statistics for a given City: Top -k most Negative and least Negative people'''
+    
     k = int(k)
     df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text","sentiment", "category"])
     df = df.drop_duplicates()
     labels = []
     values = []
+    
     ## K Most negative people in City
     labs = list(df[df.city == city].author.unique())
     vals = []
@@ -174,11 +185,14 @@ def city_statistics(city, k):
 
 @app.route("/state_statistics/<state>/<k>")
 def state_statistics(state, k):
+    '''Statistics for a given State: Top -k most Negative and least Negative people'''
+
     k = int(k)
     df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text", "sentiment", "category"])
     df = df.drop_duplicates()
     labels = []
     values = []
+    
     ## K Most negative people in City
     labs = list(df[df.state == state].author.unique())
     vals = []
