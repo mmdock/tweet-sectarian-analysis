@@ -8,6 +8,7 @@ from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map, icons
 import threading
 from config import *
+import os.path as path
 
 app = Flask(__name__, template_folder="web_serve/mytemplate")
 app.config['GOOGLEMAPS_KEY'] = google_token_key
@@ -54,10 +55,10 @@ def fullmap():
 
 @app.route("/statistics")
 def statistics():
-    df = pd.read_csv("stats.csv")
-    #df.describe()
-    labels = ["January","February","March","April","May","June","July","August"]
-    values = [10,9,8,7,6,4,7,8]
+    df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text"])
+    df.describe()
+    labels = list(df.city.unique())
+    values = list(df.groupby("city").city.nunique())
     return render_template('index.html', values=values, labels=labels)
 
 class TweetStreamListener(StreamListener):
@@ -91,9 +92,12 @@ class TweetStreamListener(StreamListener):
         if(dict_data["place"]["country_code"] == "US"):
             m.val.append({'icon': icons[0], 'lng': lng, 'lat': lat, 'infobox': text})
             d = {'author': author, 'city': city, 'state':state, 'lat':lat, 'lng': lng, 'text': text}
-            df = pd.DataFrame(data=d)
+            df = pd.DataFrame(data=d, columns=["author", "city", "state", "lat", "lng", "text"])                
             with open('stats.csv', 'a') as f:
-                df.to_csv(f, header=False)
+                if not path.exists("stats.csv"):
+                    df.to_csv(f, header = True)                    
+                else:
+                    df.to_csv(f, header = False)
             
         return True
 
