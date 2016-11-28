@@ -65,7 +65,7 @@ def statistics(k):
     '''Basic Statics Information Function.'''
     
     k = int(k)
-    df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text","sentiment", "category"])
+    df = pd.read_csv("saved_data/stats.csv", names=["", "author", "city", "state", "lat", "lng", "text","sentiment", "category"])
     df = df.drop_duplicates()
     labels = []
     values = []
@@ -152,7 +152,7 @@ def city_statistics(city, k):
     '''Statistics for a given City: Top -k most Negative and least Negative people'''
     
     k = int(k)
-    df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text","sentiment", "category"])
+    df = pd.read_csv("saved_data/stats.csv", names=["", "author", "city", "state", "lat", "lng", "text","sentiment", "category"])
     df = df.drop_duplicates()
     labels = []
     values = []
@@ -188,7 +188,7 @@ def state_statistics(state, k):
     '''Statistics for a given State: Top -k most Negative and least Negative people'''
 
     k = int(k)
-    df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text", "sentiment", "category"])
+    df = pd.read_csv("saved_data/stats.csv", names=["", "author", "city", "state", "lat", "lng", "text", "sentiment", "category"])
     df = df.drop_duplicates()
     labels = []
     values = []
@@ -284,7 +284,7 @@ class TweetStreamListener(StreamListener):
             m.val.append({'icon': icons[sentiment], 'lng': lng, 'lat': lat, 'infobox':  typefind(category) + ": " + text[0]  })
             d = {'author': author, 'city': city, 'state':state, 'lat':lat, 'lng': lng, 'text': text, 'sentiment': sentiment, 'category': category}
             df = pd.DataFrame(data=d, columns=["author", "city", "state", "lat", "lng", "text", "sentiment", "category"])
-            with open('stats.csv', 'a') as f:
+            with open('saved_data/stats.csv', 'a') as f:
                 if not path.exists("stats.csv"):
                     df.to_csv(f, header = True)
                 else:
@@ -318,7 +318,7 @@ if __name__ == '__main__':
 
     m = Markers() #Load Markers singleton class
     
-    old = pd.read_csv('stats.csv')
+    old = pd.read_csv('saved_data/stats.csv')
     old = old.drop_duplicates() # Handle duplication behavior
     ## Load up previously pulled tweets into Marker Singleton
     for index, row in old.iterrows():
