@@ -54,7 +54,7 @@ def fullmap():
 
 @app.route("/statistics")
 def statistics():
-    #df = pd.from_csv("stats.csv")
+    df = pd.read_csv("stats.csv")
     #df.describe()
     labels = ["January","February","March","April","May","June","July","August"]
     values = [10,9,8,7,6,4,7,8]
@@ -90,7 +90,7 @@ class TweetStreamListener(StreamListener):
         
         if(dict_data["place"]["country_code"] == "US"):
             m.val.append({'icon': icons[0], 'lng': lng, 'lat': lat, 'infobox': text})
-            d = {'author': author, 'text': text, 'city': city, 'state':state, 'lat':lat, 'lng': lng}
+            d = {'author': author, 'city': city, 'state':state, 'lat':lat, 'lng': lng, 'text': text}
             df = pd.DataFrame(data=d)
             with open('stats.csv', 'a') as f:
                 df.to_csv(f, header=False)
