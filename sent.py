@@ -9,6 +9,7 @@ from flask_googlemaps import Map, icons
 import threading
 from config import *
 import os.path as path
+from train.train import KNNClassifier
 
 app = Flask(__name__, template_folder="web_serve/mytemplate")
 app.config['GOOGLEMAPS_KEY'] = google_token_key
@@ -67,7 +68,7 @@ def statistics():
         vals.append((df[df.city == label]).shape[0])
     values.append(vals)
     labels.append(labs)
-    
+
     ## Author
     labs = list(df.author.unique())
     vals = []
@@ -83,7 +84,7 @@ def statistics():
         vals.append((df[df.state == label]).shape[0])
     values.append(vals)
     labels.append(labs)
-    
+
 ##    ## City avg
 ##    labs = list(df.city.unique())
 ##    vals = []
@@ -91,7 +92,7 @@ def statistics():
 ##        vals.append((df[df.city == label]).mean())
 ##    values.append(vals)
 ##    labels.append(labs)
-##    
+##
 ##    ##States avg
 ##    labs = list(df.state.unique())
 ##    vals = []
@@ -110,6 +111,10 @@ def statistics():
     return render_template('index.html', values=values, labels=labels)
 
 class TweetStreamListener(StreamListener):
+
+    def __init__(self):
+        self.classifier = KNNClassifier('train/train.csv')
+
     # on success
     def on_data(self, data):
         # decode json
@@ -129,24 +134,27 @@ class TweetStreamListener(StreamListener):
             c1 = c1.strip().split(", ")
         else:
             c1 = ["NA","NA"]
-        
+
         author = [dict_data["user"]["screen_name"]]
         city = [c1[0]]
         state = [c1[1]]
         lng = [(dict_data["place"]["bounding_box"]["coordinates"][0][0][0] + dict_data["place"]["bounding_box"]["coordinates"][0][1][0] + dict_data["place"]["bounding_box"]["coordinates"][0][2][0] + dict_data["place"]["bounding_box"]["coordinates"][0][3][0])/4]
         lat = [(dict_data["place"]["bounding_box"]["coordinates"][0][0][1] + dict_data["place"]["bounding_box"]["coordinates"][0][1][1] + dict_data["place"]["bounding_box"]["coordinates"][0][2][1] + dict_data["place"]["bounding_box"]["coordinates"][0][3][1])/4]
         text = [(dict_data["text"])]
-        
+
         if(dict_data["place"]["country_code"] == "US"):
+            sentiment = self.classifier.classify(dict_data['text'], KNNClassifier.SENTIMENT)
+            category = self.classifier.classify(dict_data['text'], KNNClassifier.CATEGORY)
+
             m.val.append({'icon': icons[0], 'lng': lng, 'lat': lat, 'infobox': text})
-            d = {'author': author, 'city': city, 'state':state, 'lat':lat, 'lng': lng, 'text': text}
-            df = pd.DataFrame(data=d, columns=["author", "city", "state", "lat", "lng", "text"])                
+            d = {'author': author, 'city': city, 'state':state, 'lat':lat, 'lng': lng, 'text': text, 'sentiment': sentiment, 'category': category}
+            df = pd.DataFrame(data=d, columns=["author", "city", "state", "lat", "lng", "text", "sentiment", "category"])
             with open('stats.csv', 'a') as f:
                 if not path.exists("stats.csv"):
-                    df.to_csv(f, header = True)                    
+                    df.to_csv(f, header = True)
                 else:
                     df.to_csv(f, header = False)
-            
+
         return True
 
     # on failure
@@ -167,12 +175,10 @@ def begin_stream():
     # create instance of the tweepy stream
     stream = Stream(auth, listener)
 
-    stream.filter(track=['Trump'], languages = ['en'])
-    
-if __name__ == '__main__':
+    stream.filter(track=keywords, languages = ['en'])
 
+if __name__ == '__main__':
 
     # search twitter for "congress" keyword
   #  threading.Thread(target=begin_stream).start()
     app.run(debug=True, use_reloader=True, host= '0.0.0.0')
-
