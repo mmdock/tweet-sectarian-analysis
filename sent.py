@@ -18,7 +18,7 @@ GoogleMaps(app, key=google_token_key)
 def my_max(li):
     return max(li)
 
-icons = ['//maps.google.com/mapfiles/ms/icons/blue-dot.png', '//maps.google.com/mapfiles/ms/icons/green-dot.png', icons.dots.yellow, icons.dots.red]
+icons = ['//maps.google.com/mapfiles/ms/icons/blue-dot.png', '//maps.google.com/mapfiles/ms/icons/green-dot.png', icons.dots.yellow, icons.dots.red, icons.dots.orange, icons.dots.black, icons.dots.brown]
 class Markers(object):
     class __Markers:
         def __init__(self):
@@ -60,6 +60,7 @@ def fullmap():
 def statistics(k):
     k = int(k)
     df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text","sentiment", "category"])
+    df = df.drop_duplicates()
     labels = []
     values = []
     
@@ -145,6 +146,7 @@ def statistics(k):
 def city_statistics(city, k):
     k = int(k)
     df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text","sentiment", "category"])
+    df = df.drop_duplicates()
     labels = []
     values = []
     ## K Most negative people in City
@@ -177,6 +179,7 @@ def city_statistics(city, k):
 def state_statistics(state, k):
     k = int(k)
     df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text", "sentiment", "category"])
+    df = df.drop_duplicates()
     labels = []
     values = []
     ## K Most negative people in City
@@ -241,7 +244,7 @@ class TweetStreamListener(StreamListener):
             sentiment = self.classifier.classify(dict_data['text'], KNNClassifier.SENTIMENT)
             category = self.classifier.classify(dict_data['text'], KNNClassifier.CATEGORY)
 
-            m.val.append({'icon': icons[0], 'lng': lng, 'lat': lat, 'infobox': text})
+            m.val.append({'icon': icons[sentiment], 'lng': lng, 'lat': lat, 'infobox': text})
             d = {'author': author, 'city': city, 'state':state, 'lat':lat, 'lng': lng, 'text': text, 'sentiment': sentiment, 'category': category}
             df = pd.DataFrame(data=d, columns=["author", "city", "state", "lat", "lng", "text", "sentiment", "category"])
             with open('stats.csv', 'a') as f:
@@ -264,7 +267,9 @@ def begin_stream():
         lat = row[4]
         lng = row[5]
         text = row[6]
-        m.val.append({'icon': icons[0], 'lng': lng, 'lat': lat, 'infobox': text})
+        sent = row[7]
+        type = row[8]
+        m.val.append({'icon': icons[sent], 'lng': lng, 'lat': lat, 'infobox': text})
 
     # create instance of the tweepy tweet stream listener
     listener = TweetStreamListener()
