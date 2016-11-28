@@ -46,10 +46,10 @@ def fullmap():
             "position:absolute;"
             "z-index:200;"
         ),
-        lat=37.4419,
-        lng=-122.1419,
+        lat=37.0902,
+        lng=-98.35,
         markers= m.val,
-        zoom = "4",
+        zoom = "5",
     )
     return render_template('example_fullmap.html', fullmap=fullmap)
 
