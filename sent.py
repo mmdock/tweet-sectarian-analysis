@@ -272,5 +272,5 @@ def begin_stream():
 if __name__ == '__main__':
 
     # search twitter for "congress" keyword
-  #  threading.Thread(target=begin_stream).start()
+    threading.Thread(target=begin_stream).start()
     app.run(debug=True, use_reloader=True, host= '0.0.0.0')
