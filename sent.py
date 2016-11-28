@@ -290,16 +290,6 @@ def typefind(val):
 
 
 def begin_stream():
-    m = Markers()
-    old = pd.read_csv('stats.csv')
-    old = old.drop_duplicates()
-    for index, row in old.iterrows():
-        lat = row[4]
-        lng = row[5]
-        text = row[6]
-        sent = row[7]
-        type = row[8]
-        m.val.append({'icon': icons[sent], 'lng': lng, 'lat': lat, 'infobox': typefind(type) + ": " + text})
 
     # create instance of the tweepy tweet stream listener
     listener = TweetStreamListener()
@@ -317,6 +307,17 @@ def begin_stream():
 
 if __name__ == '__main__':
 
+    m = Markers()
+    old = pd.read_csv('stats.csv')
+    old = old.drop_duplicates()
+    for index, row in old.iterrows():
+        lat = row[4]
+        lng = row[5]
+        text = row[6]
+        sent = row[7]
+        type = row[8]
+        m.val.append({'icon': icons[sent], 'lng': lng, 'lat': lat, 'infobox': typefind(type) + ": " + text})
+
     # search twitter for "congress" keyword
-    threading.Thread(target=begin_stream).start()
+    #threading.Thread(target=begin_stream).start()
     app.run(debug=True, use_reloader=True, host= '0.0.0.0')
