@@ -4,47 +4,51 @@ from nltk.tokenize import TweetTokenizer
 from nltk.corpus import stopwords
 
 
-def train(data, targets, k=5):
-    knn = KNeighborsClassifier(n_neighbors=k)
-    knn.fit(data, targets)
-    return knn
+class KNNClassifier:
+    SENTIMENT = 0
+    CATEGORY = 1
 
+    def __init__(self, filename, k=2):
+        self.sent_model = KNeighborsClassifier(n_neighbors=k)
+        self.category_model = KNeighborsClassifier(n_neighbors=k)
+        data = pd.read_csv(filename)
+        sentiments = data.ix[:, 1]
+        categories = data.ix[:, 3]
+        text = data.ix[:, 2]
+        self.stop_words = stopwords.words('english')
+        self.tknzr = TweetTokenizer()
+        self.word_list = set()
+        tweets = []
+        for tweet in text:
+            tokenized = [w for w in self.tknzr.tokenize(tweet.lower())
+                         if w not in self.stop_words]
+            tweets.append(tokenized)
+            self.word_list.update(tokenized)
 
-def check_model(model, test_data, targets):
-    total = correct = 0
-    predictions = model.predict(test_data)
-    for i, prediction in enumerate(predictions):
-        total += 1
-        if prediction == targets[i]:
-            correct += 1
+        vectors = []
+        for tweet in tweets:
+            vectors.append([1 if w in tweet else 0 for w in self.word_list])
 
-    return correct/total
+        self.sent_model.fit(vectors, sentiments)
+        self.category_model.fit(vectors, categories)
+
+    def classify(self, tweet_text, model_type):
+        tokenized = [w for w in self.tknzr.tokenize(tweet_text.lower())
+                     if w not in self.stop_words]
+        vector = [1 if w in tokenized else 0 for w in self.word_list]
+        if model_type == self.SENTIMENT:
+            return self.sent_model.predict([vector])[0]
+        elif model_type == self.CATEGORY:
+            return self.category_model.predict([vector])[0]
+        else:
+            return -1
 
 
 if __name__ == '__main__':
+    knn = KNNClassifier('train.csv')
     data = pd.read_csv('train.csv')
-    sentiments = data.ix[:, 1]
     categories = data.ix[:, 3]
-    text = data.ix[:, 2]
-    stop_words = stopwords.words('english')
-    tknzr = TweetTokenizer()
-
-    word_list = set()
-    tweets = []
-    for tweet in text:
-        tokenized = [word for word in tknzr.tokenize(tweet.lower())
-                     if word not in stop_words]
-        tweets.append(tokenized)
-        word_list.update(tokenized)
-
-    vectors = []
-    for tweet in tweets:
-        vectors.append([1 if word in tweet else 0 for word in word_list])
-
-    sent_model = train(vectors, sentiments, k=2)
-    cat_model = train(vectors, categories, k=2)
-
-    sent = check_model(sent_model, vectors, sentiments)
-    print('Correct: {}%'.format(100*sent))
-    cat = check_model(cat_model, vectors, categories)
-    print('Correct: {}%'.format(100*cat))
+    text = [str(x) for x in data.ix[:, 2]]
+    for i, tweet in enumerate(text):
+        predicted = knn.classify(tweet, KNNClassifier.CATEGORY)
+        print(predicted, categories[i])
