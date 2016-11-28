@@ -229,7 +229,10 @@ class TweetStreamListener(StreamListener):
 
         author = [dict_data["user"]["screen_name"]]
         city = [c1[0]]
-        state = [c1[1]]
+        try:
+            state = [c1[1]]
+        except IndexError:
+            state = 'null'
         lng = [(dict_data["place"]["bounding_box"]["coordinates"][0][0][0] + dict_data["place"]["bounding_box"]["coordinates"][0][1][0] + dict_data["place"]["bounding_box"]["coordinates"][0][2][0] + dict_data["place"]["bounding_box"]["coordinates"][0][3][0])/4]
         lat = [(dict_data["place"]["bounding_box"]["coordinates"][0][0][1] + dict_data["place"]["bounding_box"]["coordinates"][0][1][1] + dict_data["place"]["bounding_box"]["coordinates"][0][2][1] + dict_data["place"]["bounding_box"]["coordinates"][0][3][1])/4]
         text = [(dict_data["text"])]
@@ -254,6 +257,14 @@ class TweetStreamListener(StreamListener):
         print (status)
 
 def begin_stream():
+    m = Markers()
+    old = pd.read_csv('stats.csv')
+    old = old.drop_duplicates()
+    for index, row in old.iterrows():
+        lat = row[4]
+        lng = row[5]
+        text = row[6]
+        m.val.append({'icon': icons[0], 'lng': lng, 'lat': lat, 'infobox': text})
 
     # create instance of the tweepy tweet stream listener
     listener = TweetStreamListener()
@@ -272,5 +283,5 @@ def begin_stream():
 if __name__ == '__main__':
 
     # search twitter for "congress" keyword
-  #  threading.Thread(target=begin_stream).start()
+    threading.Thread(target=begin_stream).start()
     app.run(debug=True, use_reloader=True, host= '0.0.0.0')
