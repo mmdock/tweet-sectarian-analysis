@@ -206,6 +206,22 @@ def state_statistics(state, k):
     return render_template('city_statistics.html', values=values, labels=labels)
 
 class TweetStreamListener(StreamListener):
+    
+    def typefind(val):
+        if(val == 1):
+            return("Religion")
+        elif(val == 2):
+            return("Gender")
+        elif(val == 3):
+            return("Racial")
+        elif(val == 4):
+            return("Sexual Orientation")
+        elif(val == 5):
+            return("Disability")
+        elif(val == 6):
+            return("Political")
+        elif(val == 7):
+            return("Other")
 
     def __init__(self):
         self.classifier = KNNClassifier('train/train.csv')
@@ -241,7 +257,7 @@ class TweetStreamListener(StreamListener):
             sentiment = self.classifier.classify(dict_data['text'], KNNClassifier.SENTIMENT)
             category = self.classifier.classify(dict_data['text'], KNNClassifier.CATEGORY)
 
-            m.val.append({'icon': icons[sentiment], 'lng': lng, 'lat': lat, 'infobox': text})
+            m.val.append({'icon': icons[sentiment], 'lng': lng, 'lat': lat, 'infobox': typefind(category)})
             d = {'author': author, 'city': city, 'state':state, 'lat':lat, 'lng': lng, 'text': text, 'sentiment': sentiment, 'category': category}
             df = pd.DataFrame(data=d, columns=["author", "city", "state", "lat", "lng", "text", "sentiment", "category"])
             with open('stats.csv', 'a') as f:
@@ -256,6 +272,23 @@ class TweetStreamListener(StreamListener):
     def on_error(self, status):
         print (status)
 
+def typefind(val):
+    if(val == 1):
+        return("Religion")
+    elif(val == 2):
+        return("Gender")
+    elif(val == 3):
+        return("Racial")
+    elif(val == 4):
+        return("Sexual Orientation")
+    elif(val == 5):
+        return("Disability")
+    elif(val == 6):
+        return("Political")
+    elif(val == 7):
+        return("Other")
+
+
 def begin_stream():
     m = Markers()
     old = pd.read_csv('stats.csv')
@@ -266,7 +299,7 @@ def begin_stream():
         text = row[6]
         sent = row[7]
         type = row[8]
-        m.val.append({'icon': icons[sent], 'lng': lng, 'lat': lat, 'infobox': text})
+        m.val.append({'icon': icons[sent], 'lng': lng, 'lat': lat, 'infobox': typefind(type)})
 
     # create instance of the tweepy tweet stream listener
     listener = TweetStreamListener()
