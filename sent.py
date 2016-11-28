@@ -225,7 +225,7 @@ class TweetStreamListener(StreamListener):
             c1 = dict_data["place"]["full_name"]
             c1 = c1.strip().split(", ")
         else:
-            c1 = ["NA","NA"]
+            c1 = ["None","None"]
 
         author = [dict_data["user"]["screen_name"]]
         city = [c1[0]]
