@@ -51,34 +51,49 @@ def fullmap():
     )
     return render_template('example_fullmap.html', fullmap=fullmap)
 
+@app.route("/statistics")
+def statistics():
+    df = pd.from_csv("stats.csv")
+    df.describe()
+    labels = ["January","February","March","April","May","June","July","August"]
+    values = [10,9,8,7,6,4,7,8]
+    return render_template('index.html', values=values, labels=labels)
+
 class TweetStreamListener(StreamListener):
     # on success
     def on_data(self, data):
-        text = ""
-        city = ""
-        state = ""
-        location = ""
         # decode json
         dict_data = json.loads(data)
-        # pass tweet into TextBlob
         if "text" not in dict_data:
             return
         if not dict_data.get("place"):
             return
+        print(json.dumps(dict_data, indent=4, sort_keys=True))
         m = Markers()
-        if(dict_data["place"]["country_code"] == "US"):
-            m.val.append({'icon': icons[0], 'lng': dict_data["place"]["bounding_box"]["coordinates"][0][0][0], 'lat': dict_data["place"]["bounding_box"]["coordinates"][0][0][1], 'infobox': dict_data["text"]})
-        text = (dict_data["text"])
-        c1 = (dict_data["place"]["full_name"])
-        c1 = c1.strip().split(",")
-        city = (c1[0])
-        state = (c1[1])
-        location = ([dict_data["place"]["bounding_box"]["coordinates"][0][0][0],dict_data["place"]["bounding_box"]["coordinates"][0][0][1]])
-        d = {'text': text, 'city': city, 'state':state, 'location':location}
-        df = pd.DataFrame(data=d)
-        with open('stats.csv', 'a') as f:
-            df.to_csv(f, header=False)
+
+        if not dict_data["user"]["location"]:
+            c1 = dict_data["place"]["full_name"]
+            c1 = c1.strip().split(", ")
+        elif not dict_data["place"]["full_name"]:
+            c1 = dict_data["place"]["full_name"]
+            c1 = c1.strip().split(", ")
+        else:
+            c1 = ["NA","NA"]
         
+        author = [dict_data["user"]["screen_name"]]
+        city = [c1[0]]
+        state = [c1[1]]
+        lng = [(dict_data["place"]["bounding_box"]["coordinates"][0][0][0] + dict_data["place"]["bounding_box"]["coordinates"][0][1][0] + dict_data["place"]["bounding_box"]["coordinates"][0][2][0] + dict_data["place"]["bounding_box"]["coordinates"][0][3][0])/4]
+        lat = [(dict_data["place"]["bounding_box"]["coordinates"][0][0][1] + dict_data["place"]["bounding_box"]["coordinates"][0][1][1] + dict_data["place"]["bounding_box"]["coordinates"][0][2][1] + dict_data["place"]["bounding_box"]["coordinates"][0][3][1])/4]
+        text = [(dict_data["text"])]
+        
+        if(dict_data["place"]["country_code"] == "US"):
+            m.val.append({'icon': icons[0], 'lng': lng, 'lat': lat, 'infobox': text})
+            d = {'author': author, 'text': text, 'city': city, 'state':state, 'lat':lat, 'lng': lng}
+            df = pd.DataFrame(data=d)
+            with open('stats.csv', 'a') as f:
+                df.to_csv(f, header=False)
+            
         return True
 
     # on failure
