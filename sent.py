@@ -70,8 +70,8 @@ def statistics(k):
     sort = sorted(zipped, key=lambda x: x[1])
     if k < len(labs):
         sort = sort[-k:]
-    values.append([y for x,y in sort])
-    labels.append([x for x,y in sort])
+    values.append([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA")) ])
+    labels.append([x for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
 ##    values.append(vals)
 ##    labels.append(labs)
 
@@ -97,8 +97,8 @@ def statistics(k):
     sort = sorted(zipped, key=lambda x: x[1])
     if k < len(labs):
         sort = sort[-k:]
-    values.append([y for x,y in sort])
-    labels.append([x for x,y in sort])
+    values.append([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
+    labels.append([x for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
     
     ## City avg
     labs = list(df.city.unique())
@@ -285,5 +285,5 @@ def begin_stream():
 if __name__ == '__main__':
 
     # search twitter for "congress" keyword
-    threading.Thread(target=begin_stream).start()
+    #threading.Thread(target=begin_stream).start()
     app.run(debug=True, use_reloader=True, host= '0.0.0.0')
