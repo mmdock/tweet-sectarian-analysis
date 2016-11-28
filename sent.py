@@ -10,10 +10,11 @@ import threading
 from config import *
 
 app = Flask(__name__, template_folder="web_serve/mytemplate")
-app.config['GOOGLEMAPS_KEY'] = "AIzaSyAZzeHhs-8JZ7i18MjFuM35dJHq70n3Hx4"
-GoogleMaps(app, key="AIzaSyAZzeHhs-8JZ7i18MjFuM35dJHq70n3Hx4")
+app.config['GOOGLEMAPS_KEY'] = google_token_key
+GoogleMaps(app, key=google_token_key)
 
 icons = ['//maps.google.com/mapfiles/ms/icons/blue-dot.png', '//maps.google.com/mapfiles/ms/icons/green-dot.png', icons.dots.yellow, icons.dots.red]
+
 class Markers(object):
     class __Markers:
         def __init__(self):
@@ -53,8 +54,8 @@ def fullmap():
 
 @app.route("/statistics")
 def statistics():
-    df = pd.from_csv("stats.csv")
-    df.describe()
+    #df = pd.from_csv("stats.csv")
+    #df.describe()
     labels = ["January","February","March","April","May","June","July","August"]
     values = [10,9,8,7,6,4,7,8]
     return render_template('index.html', values=values, labels=labels)
