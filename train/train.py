@@ -52,8 +52,6 @@ class KNNClassifier:
         tweet = re.sub('((www\.[^\s]+)|(https?://[^\s]+))','',tweet)
         #clean up whitespace
         tweet = re.sub('[\s]+', ' ', tweet)
-        #cleanup hashtag data
-        tweet = re.sub(r'#([^\s]+)', r'\1', tweet)
         #cleanup usernames
         tweet = re.sub('@[^\s]+','',tweet)
         #remove non letters
