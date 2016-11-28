@@ -15,7 +15,7 @@ app = Flask(__name__, template_folder="web_serve/mytemplate")
 app.config['GOOGLEMAPS_KEY'] = google_token_key
 GoogleMaps(app, key=google_token_key)
 
-icons = ['//maps.google.com/mapfiles/ms/icons/blue-dot.png', '//maps.google.com/mapfiles/ms/icons/green-dot.png', icons.dots.yellow, icons.dots.red, icons.dots.orange, icons.dots.black, icons.dots.brown]
+icons = [icons.dots.brown, icons.dots.green, icons.dots.yellow, icons.dots.red, icons.dots.orange, icons.dots.blue, icons.dots.black]
 class Markers(object):
     class __Markers:
         def __init__(self):
@@ -285,5 +285,5 @@ def begin_stream():
 if __name__ == '__main__':
 
     # search twitter for "congress" keyword
-    #threading.Thread(target=begin_stream).start()
+    threading.Thread(target=begin_stream).start()
     app.run(debug=True, use_reloader=True, host= '0.0.0.0')
