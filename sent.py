@@ -235,7 +235,7 @@ class TweetStreamListener(StreamListener):
         try:
             state = [c1[1]]
         except IndexError:
-            state = 'null'
+            state = 'None'
         lng = [(dict_data["place"]["bounding_box"]["coordinates"][0][0][0] + dict_data["place"]["bounding_box"]["coordinates"][0][1][0] + dict_data["place"]["bounding_box"]["coordinates"][0][2][0] + dict_data["place"]["bounding_box"]["coordinates"][0][3][0])/4]
         lat = [(dict_data["place"]["bounding_box"]["coordinates"][0][0][1] + dict_data["place"]["bounding_box"]["coordinates"][0][1][1] + dict_data["place"]["bounding_box"]["coordinates"][0][2][1] + dict_data["place"]["bounding_box"]["coordinates"][0][3][1])/4]
         text = [(dict_data["text"])]
