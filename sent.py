@@ -257,7 +257,7 @@ class TweetStreamListener(StreamListener):
             sentiment = self.classifier.classify(dict_data['text'], KNNClassifier.SENTIMENT)
             category = self.classifier.classify(dict_data['text'], KNNClassifier.CATEGORY)
 
-            m.val.append({'icon': icons[sentiment], 'lng': lng, 'lat': lat, 'infobox': typefind(category)})
+            m.val.append({'icon': icons[sentiment], 'lng': lng, 'lat': lat, 'infobox':  typefind(category) + ": " + text[0]})
             d = {'author': author, 'city': city, 'state':state, 'lat':lat, 'lng': lng, 'text': text, 'sentiment': sentiment, 'category': category}
             df = pd.DataFrame(data=d, columns=["author", "city", "state", "lat", "lng", "text", "sentiment", "category"])
             with open('stats.csv', 'a') as f:
@@ -299,7 +299,7 @@ def begin_stream():
         text = row[6]
         sent = row[7]
         type = row[8]
-        m.val.append({'icon': icons[sent], 'lng': lng, 'lat': lat, 'infobox': typefind(type)})
+        m.val.append({'icon': icons[sent], 'lng': lng, 'lat': lat, 'infobox': typefind(type) + ": " + text})
 
     # create instance of the tweepy tweet stream listener
     listener = TweetStreamListener()
