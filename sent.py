@@ -59,7 +59,7 @@ def fullmap():
 @app.route("/statistics/<k>")
 def statistics(k):
     k = int(k)
-    df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text"])
+    df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text","sentiment", "category"])
     labels = []
     values = []
     ## City
@@ -134,7 +134,7 @@ def statistics(k):
 @app.route("/city_statistics/<city>/<k>")
 def city_statistics(city, k):
     k = int(k)
-    df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text"])
+    df = pd.read_csv("stats.csv", names=["", "author", "city", "state", "lat", "lng", "text","sentiment", "category"])
     labels = []
     values = []
     ## K Most negative people in City
