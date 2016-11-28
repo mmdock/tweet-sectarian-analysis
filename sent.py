@@ -285,7 +285,7 @@ class TweetStreamListener(StreamListener):
             d = {'author': author, 'city': city, 'state':state, 'lat':lat, 'lng': lng, 'text': text, 'sentiment': sentiment, 'category': category}
             df = pd.DataFrame(data=d, columns=["author", "city", "state", "lat", "lng", "text", "sentiment", "category"])
             with open('saved_data/stats.csv', 'a') as f:
-                if not path.exists("stats.csv"):
+                if not path.exists("saved_data/stats.csv"):
                     df.to_csv(f, header = True)
                 else:
                     df.to_csv(f, header = False)
