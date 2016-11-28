@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.neighbors import KNeighborsClassifier
 from nltk.tokenize import TweetTokenizer
 from nltk.corpus import stopwords
+import re
 
 
 class KNNClassifier:
@@ -20,6 +21,7 @@ class KNNClassifier:
         self.word_list = set()
         tweets = []
         for tweet in text:
+            tweet = self.convert(tweet)
             tokenized = [w for w in self.tknzr.tokenize(tweet.lower())
                          if w not in self.stop_words]
             tweets.append(tokenized)
@@ -42,6 +44,26 @@ class KNNClassifier:
             return self.category_model.predict([vector])[0]
         else:
             return -1
+
+    def convert(self,tweet):
+        #lowercase conversion
+        tweet = tweet.lower()
+        #remove URL formating
+        tweet = re.sub('((www\.[^\s]+)|(https?://[^\s]+))','',tweet)
+        #clean up whitespace
+        tweet = re.sub('[\s]+', ' ', tweet)
+        #cleanup hashtag data
+        tweet = re.sub(r'#([^\s]+)', r'\1', tweet)
+        #cleanup usernames
+        tweet = re.sub('@[^\s]+','',tweet)
+        #remove non letters
+        tweet = re.sub('[^a-zA-Z]', ' ' , tweet)
+        return self.replaceTwoOrMore(tweet)
+
+    def replaceTwoOrMore(self,s):
+        #look for 2 or more repetitions of character and replace with the character itself
+        pattern = re.compile(r"(.)\1{1,}", re.DOTALL)
+        return pattern.sub(r"\1\1", s)
 
 
 if __name__ == '__main__':
