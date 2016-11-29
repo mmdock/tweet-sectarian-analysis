@@ -9,6 +9,7 @@ import os.path as path
 from config import *
 import pandas as pd
 import threading
+import random
 import json
 
 ## Creating Flask app.  Setting Template location
@@ -186,6 +187,16 @@ def city_statistics(city, k):
     labels.append([x for x,y in sort])
     limits.append((max([y for x,y in sort])))
 
+    ## Pie Data Category Ratios
+
+    labs = list(df[df.city == city].category.unique())
+    vals = []
+    r = lambda: random.randint(0,255)
+    for label in labs:
+        vals.append((df[df.city == city])[df.category == label].shape[0])
+    values.append(vals)
+    labels.append([typefind(l) for l in labs])
+    limits.append(max(vals))
     return render_template('city_statistics.html', values=values, labels=labels, limit=limits)
 
 @app.route("/state_statistics/<state>/<k>")
@@ -224,7 +235,7 @@ def state_statistics(state, k):
     labels.append([x for x,y in sort])
     limits.append((max([y for x,y in sort])))
 
-    return render_template('city_statistics.html', values=values, labels=labels, limit = limits)
+    return render_template('state_statistics.html', values=values, labels=labels, limit = limits)
 
 def typefind(val):
     if(val == 1):
