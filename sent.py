@@ -118,9 +118,9 @@ def statistics(k):
     sort = sorted(zipped, key=lambda x: x[1])
     if k < len(labs):
         sort = sort[-k:]
-    values.append([y for x,y in sort])
-    labels.append([x for x,y in sort])
-    limits.append(max([y for x,y in sort]))
+    values.append([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA")) ])
+    labels.append([x for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
+    limits.append(max([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
     
     ## States avg - Top k
     labs = list(df.state.unique())
@@ -131,10 +131,9 @@ def statistics(k):
     sort = sorted(zipped, key=lambda x: x[1])
     if k < len(labs):
         sort = sort[-k:]
-    values.append([y for x,y in sort])
-    labels.append([x for x,y in sort])
-
-    limits.append(max([y for x,y in sort]))
+    values.append([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
+    labels.append([x for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
+    limits.append(max([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))]))
 
     ## Author avg - Top k
     labs = list(df.author.unique())
