@@ -69,6 +69,7 @@ def statistics(k):
     df = df.drop_duplicates()
     labels = []
     values = []
+    limits = []
     
     ## City Count - Top k
     labs = list(df.city.unique())
@@ -81,7 +82,7 @@ def statistics(k):
         sort = sort[-k:]
     values.append([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA")) ])
     labels.append([x for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
-
+    limits.append(max([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))]))
 
     ## Author Count - Top k
     labs = list(df.author.unique())
@@ -94,7 +95,7 @@ def statistics(k):
         sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
-    
+    limits.append(max([y for x,y in sort]))
 
     ## States Count - Top k
     labs = list(df.state.unique())
@@ -107,7 +108,7 @@ def statistics(k):
         sort = sort[-k:]
     values.append([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
     labels.append([x for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
-    
+    limits.append(max([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))]))
     ## City avg - Top k
     labs = list(df.city.unique())
     vals = []
@@ -119,7 +120,8 @@ def statistics(k):
         sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
-
+    limits.append(max([y for x,y in sort]))
+    
     ## States avg - Top k
     labs = list(df.state.unique())
     vals = []
@@ -132,6 +134,8 @@ def statistics(k):
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
 
+    limits.append(max([y for x,y in sort]))
+
     ## Author avg - Top k
     labs = list(df.author.unique())
     vals = []
@@ -143,7 +147,8 @@ def statistics(k):
         sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
-    return render_template('statistics.html', values=values, labels=labels)
+    limits.append(max([y for x,y in sort]))
+    return render_template('statistics.html', values=values, labels=labels, limit=limits)
 
 @app.route("/city_statistics/<city>/<k>")
 def city_statistics(city, k):

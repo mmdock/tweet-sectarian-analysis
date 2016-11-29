@@ -116,7 +116,7 @@
    var mychart = document.getElementById("chart").getContext("2d");
  
    steps = 10
-   max = 30
+   max = {{limit[0]}}
    // draw bar chart
    new Chart(mychart).Bar(barData, {
         scaleOverride: true,
@@ -133,7 +133,7 @@
    var mychart2 = document.getElementById("chart2").getContext("2d");
 
    steps = 10
-   max = 30
+   max = {{limit[1]}}
    // draw bar chart
    new Chart(mychart2).Bar(barData2, {
         scaleOverride: true,
@@ -147,6 +147,8 @@
    });
    
    var mychart3 = document.getElementById("chart3").getContext("2d");
+   steps = 10
+   max = {{limit[2]}}
    new Chart(mychart3).Bar(barData3, {
         scaleOverride: true,
         scaleSteps: steps,
@@ -158,6 +160,8 @@
         scaleShowLabels: true
    });
    var mychart4 = document.getElementById("chart4").getContext("2d");
+   steps = 10
+   max = {{limit[3]}}
    new Chart(mychart4).Bar(barData4, {
         scaleOverride: true,
         scaleSteps: steps,
@@ -169,6 +173,8 @@
         scaleShowLabels: true
    });
    var mychart5 = document.getElementById("chart5").getContext("2d");
+   steps = 10
+   max = {{limit[4]}}
    new Chart(mychart5).Bar(barData5, {
         scaleOverride: true,
         scaleSteps: steps,
@@ -180,6 +186,8 @@
         scaleShowLabels: true
    });
    var mychart6 = document.getElementById("chart6").getContext("2d");
+   steps = 10
+   max = {{limit[5]}}
    new Chart(mychart6).Bar(barData6, {
         scaleOverride: true,
         scaleSteps: steps,
