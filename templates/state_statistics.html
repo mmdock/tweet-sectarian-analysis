@@ -3,9 +3,9 @@
 <title>Chart.js </title>     
 <!-- import plugin script --> 
 <script type="text/javascript" src="{{ url_for('static', filename='Chart.min.js') }}"></script></head><body>
-<h1>Top 10 Most Negative People in this state</h1><!-- bar chart canvas element -->
+<h1>Top Most Negative People in this state</h1><!-- bar chart canvas element -->
 <canvas id="chart" width="600" height="400"></canvas>
-<h1>Top 10 Most Positive People in this state</h1>
+<h1>Top Most Positive People in this state</h1>
 <canvas id="chart2" width="1000" height="400"></canvas>
 <script>
    // bar chart data
@@ -45,7 +45,7 @@
    var mychart = document.getElementById("chart").getContext("2d");
  
    steps = 10
-   max = 30
+   max = {{limit[0]}}
    // draw bar chart
    new Chart(mychart).Bar(barData, {
         scaleOverride: true,
@@ -62,7 +62,7 @@
    var mychart2 = document.getElementById("chart2").getContext("2d");
 
    steps = 10
-   max = 30
+   max = {{limit[0]}}
    // draw bar chart
    new Chart(mychart2).Bar(barData2, {
         scaleOverride: true,

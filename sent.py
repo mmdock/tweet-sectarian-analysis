@@ -120,7 +120,7 @@ def statistics(k):
         sort = sort[-k:]
     values.append([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA")) ])
     labels.append([x for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
-    limits.append(max([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))])
+    limits.append(max([y for x,y in sort if not (y=="None" or (x=="None" or x =="USA"))]))
     
     ## States avg - Top k
     labs = list(df.state.unique())
@@ -158,6 +158,7 @@ def city_statistics(city, k):
     df = df.drop_duplicates()
     labels = []
     values = []
+    limits = []
     
     ## K Most negative people in City
     labs = list(df[df.city == city].author.unique())
@@ -170,6 +171,7 @@ def city_statistics(city, k):
         sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
+    limits.append((max([y for x,y in sort])))
 
     ## K Most positive people in City
     labs = list(df[df.city == city].author.unique())
@@ -182,8 +184,9 @@ def city_statistics(city, k):
         sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
+    limits.append((max([y for x,y in sort])))
 
-    return render_template('city_statistics.html', values=values, labels=labels)
+    return render_template('city_statistics.html', values=values, labels=labels, limit=limits)
 
 @app.route("/state_statistics/<state>/<k>")
 def state_statistics(state, k):
@@ -194,7 +197,7 @@ def state_statistics(state, k):
     df = df.drop_duplicates()
     labels = []
     values = []
-    
+    limits = []
     ## K Most negative people in City
     labs = list(df[df.state == state].author.unique())
     vals = []
@@ -206,6 +209,7 @@ def state_statistics(state, k):
         sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
+    limits.append((max([y for x,y in sort])))
 
     ## K Most positive people in City
     labs = list(df[df.state == state].author.unique())
@@ -218,8 +222,9 @@ def state_statistics(state, k):
         sort = sort[-k:]
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
+    limits.append((max([y for x,y in sort])))
 
-    return render_template('city_statistics.html', values=values, labels=labels)
+    return render_template('city_statistics.html', values=values, labels=labels, limit = limits)
 
 def typefind(val):
     if(val == 1):
