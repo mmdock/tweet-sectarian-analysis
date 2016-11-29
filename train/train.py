@@ -12,6 +12,7 @@ class KNNClassifier:
     def __init__(self, filename, k=2):
         self.sent_model = KNeighborsClassifier(n_neighbors=k)
         self.category_model = KNeighborsClassifier(n_neighbors=k)
+
         data = pd.read_csv(filename)
         sentiments = data.ix[:, 1]
         categories = data.ix[:, 3]
@@ -19,6 +20,9 @@ class KNNClassifier:
         self.stop_words = stopwords.words('english')
         self.tknzr = TweetTokenizer()
         self.word_list = set()
+
+        # create the total word list
+        # tokenize tweets and remove stop words
         tweets = []
         for tweet in text:
             tweet = self.convert(tweet)
@@ -27,17 +31,21 @@ class KNNClassifier:
             tweets.append(tokenized)
             self.word_list.update(tokenized)
 
+        # vectorize tweets
         vectors = []
         for tweet in tweets:
             vectors.append([1 if w in tweet else 0 for w in self.word_list])
 
+        # train the sentiment and category models
         self.sent_model.fit(vectors, sentiments)
         self.category_model.fit(vectors, categories)
 
     def classify(self, tweet_text, model_type):
+        # tokenize and vectorize tweet
         tokenized = [w for w in self.tknzr.tokenize(tweet_text.lower())
                      if w not in self.stop_words]
         vector = [1 if w in tokenized else 0 for w in self.word_list]
+
         if model_type == self.SENTIMENT:
             return self.sent_model.predict([vector])[0]
         elif model_type == self.CATEGORY:
