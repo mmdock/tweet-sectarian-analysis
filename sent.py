@@ -127,10 +127,8 @@ def statistics(k):
         vals.append((df[df.state == label]).sentiment.mean())
     zipped = list(zip(labs,vals))
     sort = sorted(zipped, key=lambda x: x[1])
-    print(sort)
     if k < len(labs):
         sort = sort[-k:]
-    print(sort)
     values.append([y for x,y in sort])
     labels.append([x for x,y in sort])
 
