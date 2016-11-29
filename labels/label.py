@@ -9,6 +9,7 @@ import sys
 def label(tweets):
     with open(tweets) as f:
         content = f.readlines()
+    #split our labeling task to 3 users
     try:
         group = str(input("Select data set, 1, 2, or 3.: "))
     except ValueError:
@@ -24,15 +25,18 @@ def label(tweets):
 
 def lab(start, stop,content):
     rated = 0
+    #loop thorugh the users range
     for x in range(start, stop):
         ratings = []
         texts = []
         types = []
         print("You Have Rated... " + str(rated) + "\n")
+        #once the user has rated 250 they are done.
         if(rated == 251):
             break
         print(content[x] + "\n")
         while True:
+            #select the type and sentiment.
             try:
                 type = str(input("Select Type: 7=Other 6=Political, 5= Disability, 4=sexual orientation, 3=racial, 2=gender, 1=religion, 0=skip "))
                 #skip
@@ -42,6 +46,7 @@ def lab(start, stop,content):
             except ValueError:
                 print("Sorry, I didn't understand that.")
                 continue
+            #store appropriately.
             #Pro Racist Remarks
             if(rating == "5"):
                 texts.append(content[x])
