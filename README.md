@@ -39,8 +39,3 @@ Want to improve it?
 - Sep classifier for both category and sentiment
 - Better classifiers.
 - Use a better way to store results from data stream.
-
-
-### Who do I talk to? ###
-
-* Morgan Dock, Ethan Luckett, Dixon Styres
