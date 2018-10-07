@@ -256,7 +256,7 @@ def typefind(val):
 class TweetStreamListener(StreamListener):
 
     def __init__(self):
-        self.classifier = KNNClassifier('train/train.csv')
+        self.classifier = KNNClassifier('labels/train.csv')
 
     # on success
     def on_data(self, data):
@@ -347,5 +347,5 @@ if __name__ == '__main__':
         typ = row[8]
         m.val.append({'icon': icons[sent], 'lng': lng, 'lat': lat, 'infobox': typefind(typ) + ": " + text})
 
-    #threading.Thread(target=begin_stream).start()
+    threading.Thread(target=begin_stream).start()
     app.run(debug=True, use_reloader=True, host= '0.0.0.0')

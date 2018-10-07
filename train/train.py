@@ -73,8 +73,8 @@ class KNNClassifier:
 
 
 if __name__ == '__main__':
-    knn = KNNClassifier('train.csv')
-    data = pd.read_csv('train.csv')
+    knn = KNNClassifier('../labels/train.csv')
+    data = pd.read_csv('../labels/train.csv')
     categories = data.ix[:, 3]
     text = [str(x) for x in data.ix[:, 2]]
     for i, tweet in enumerate(text):

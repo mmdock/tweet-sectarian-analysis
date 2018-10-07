@@ -9,9 +9,9 @@ import sys
 def label(tweets):
     with open(tweets) as f:
         content = f.readlines()
-    #split our labeling task to 3 users
+    #split our labeling task
     try:
-        group = str(input("Select data set, 1, 2, or 3.: "))
+        group = str(input("Select data set, 1, 2, 3, or (0 for all): "))
     except ValueError:
         print("Sorry, I didn't understand that.")
     if  (group == "1"):
@@ -20,10 +20,12 @@ def label(tweets):
         lab(500,1000,content)
     elif(group == "3"):
         lab(1001,1500,content)
+    elif(group == "0"):
+        lab(0, len(content), content)
     else:
         print("Invalid Entry")
 
-def lab(start, stop,content):
+def lab(start, stop, content):
     rated = 0
     #loop thorugh the users range
     for x in range(start, stop):
@@ -31,9 +33,6 @@ def lab(start, stop,content):
         texts = []
         types = []
         print("You Have Rated... " + str(rated) + "\n")
-        #once the user has rated 250 they are done.
-        if(rated == 251):
-            break
         print(content[x] + "\n")
         while True:
             #select the type and sentiment.
@@ -65,7 +64,7 @@ def lab(start, stop,content):
                 continue
             d = {'text': texts, 'sentiment': ratings, 'types':types}
             df = pd.DataFrame(data=d)
-            with open('ratingout.csv', 'a') as f:
+            with open('train.csv', 'a') as f:
                 df.to_csv(f, header=False)
             break
 
