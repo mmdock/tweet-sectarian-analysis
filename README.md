@@ -11,7 +11,7 @@ This is a project that was done to score the sentiment on topics of common forms
 
 * Install requirements.txt with pip
 * setup `config.py`
-* make sure there is labeled, trainable data at labels/train.csv
+* make sure there is labeled, trainable data at `labels/train.csv` (Note: currently needs to be re-gathered and re-labeled)
 * run `sent.py` 
 * Browse to 5000 port of the machine it is set up on
 * /city_statistics/<city_name>/<k> to view top k neg/pos people in a city
